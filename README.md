@@ -1,8 +1,8 @@
 - 👋  786-110
 Hi, I’m Sabahat Zahra
 - 👀 I’m interested in exploring github while working with Python
-- 🌱 I’m currently learning basics of data sciences
-- 💞️ I’m looking to collaborate on Plant Sciences and Data Sciences  
+- 🌱 I’m currently learning "basics" of data sciences
+- 💞️ I’m looking to collaborate on Plant Sciences, Genetics and Data Sciences  
 - 📫 How to reach me : Contact info coming soon ...Stay tuned 
 
 <!---
