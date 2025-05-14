@@ -105,3 +105,31 @@ chmod +x make_lfc_tables.sh
 ./make_lfc_tables.sh
 ````
 
+**COllect All the TSV files from the directories into one Folder TSV (** 
+````
+mkdir -p LFC && find exported_L3 -type f -name "*_LFC.tsv" -exec cp {} LFC/ \;
+````
+
+**In VS convert all TSV into Excel**
+> /scratch/user/name/Project/ITS_Full/ITS_trimmed/exported_L3/SOBI_TBA_U
+> exported_L3 contains all directories for the treatments with thier respective LFC files 
+
+````
+import os
+import pandas as pd
+
+# Use current directory
+input_dir = "."
+output_dir = "ITS_LFC_2023_excel"
+os.makedirs(output_dir, exist_ok=True)
+
+# Loop through all TSVs in the current directory
+for file in os.listdir(input_dir):
+    if file.endswith("_LFC.tsv"):
+        df = pd.read_csv(file, sep="\t")
+        output_file = os.path.join(output_dir, file.replace(".tsv", ".xlsx"))
+        df.to_excel(output_file, index=False)
+        print(f"✅ Converted: {file} → {output_file}")
+````
+
+
