@@ -64,28 +64,28 @@ nano make_lfc_tables.sh
 
 BASE_DIR="exported_L3"
 
-# Loop through each treatment folder inside exported_L3
+# Loop through each treatment folder
 for dir in "$BASE_DIR"/*/; do
   treatment=$(basename "$dir")
   echo "🔧 Processing: $treatment"
 
-  # Input files (generic names)
+  # Input files
   lfc="${dir}lfc_slice.csv"
   pval="${dir}p_val_slice.csv"
   qval="${dir}q_val_slice.csv"
   se="${dir}se_slice.csv"
   w="${dir}w_slice.csv"
 
-  # Skip if any required file is missing
+  # Check if files exist
   if [[ ! -f "$lfc" || ! -f "$pval" || ! -f "$qval" || ! -f "$se" || ! -f "$w" ]]; then
     echo "⚠️  Skipping $treatment — missing one or more input files"
     continue
   fi
 
-  # Output file
-  output_file="${dir}LFC.tsv"
+  # Output file with treatment name prefix
+  output_file="${dir}${treatment}_LFC.tsv"
 
-  # Merge columns and add header
+  # Merge slices into one table
   paste \
     <(tail -n +2 "$lfc" | cut -d',' -f1) \
     <(tail -n +2 "$lfc" | cut -d',' -f2) \
@@ -97,6 +97,7 @@ for dir in "$BASE_DIR"/*/; do
 
   echo "✅ Created: $output_file"
 done
+
 ````
 > **ctrl+o , Enter , ctrl+X***
 ````
