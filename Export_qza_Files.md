@@ -54,3 +54,53 @@ exported_L3/
 │   ├── ...
 ...
 ````
+# Make nano make_lfc_tables.sh to cobine output files into LFC_TSV
+
+````
+nano make_lfc_tables.sh
+````
+````
+#!/bin/bash
+
+BASE_DIR="exported_L3"
+
+# Loop through each treatment folder inside exported_L3
+for dir in "$BASE_DIR"/*/; do
+  treatment=$(basename "$dir")
+  echo "🔧 Processing: $treatment"
+
+  # Input files (generic names)
+  lfc="${dir}lfc_slice.csv"
+  pval="${dir}p_val_slice.csv"
+  qval="${dir}q_val_slice.csv"
+  se="${dir}se_slice.csv"
+  w="${dir}w_slice.csv"
+
+  # Skip if any required file is missing
+  if [[ ! -f "$lfc" || ! -f "$pval" || ! -f "$qval" || ! -f "$se" || ! -f "$w" ]]; then
+    echo "⚠️  Skipping $treatment — missing one or more input files"
+    continue
+  fi
+
+  # Output file
+  output_file="${dir}LFC.tsv"
+
+  # Merge columns and add header
+  paste \
+    <(tail -n +2 "$lfc" | cut -d',' -f1) \
+    <(tail -n +2 "$lfc" | cut -d',' -f2) \
+    <(tail -n +2 "$pval" | cut -d',' -f2) \
+    <(tail -n +2 "$qval" | cut -d',' -f2) \
+    <(tail -n +2 "$se"   | cut -d',' -f2) \
+    <(tail -n +2 "$w"    | cut -d',' -f2) |
+  sed '1iFeatureID\tLFC\tp_value\tq_value\tSE\tW' > "$output_file"
+
+  echo "✅ Created: $output_file"
+done
+````
+> **ctrl+o , Enter , ctrl+X***
+````
+chmod +x make_lfc_tables.sh
+./make_lfc_tables.sh
+````
+
